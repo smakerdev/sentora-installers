@@ -339,19 +339,6 @@ disable_file() {
     mv "$1" "$1_disabled_by_sentora" &> /dev/null
 }
 
-#--- AppArmor must be disabled to avoid problems
-if [[ "$OS" = "Ubuntu" || "$OS" = "debian" ]]; then
-    [ -f /etc/init.d/apparmor ]
-    if [ $? = "0" ]; then
-        echo -e "\n-- Disabling and removing AppArmor, please wait..."
-        /etc/init.d/apparmor stop &> /dev/null
-        update-rc.d -f apparmor remove &> /dev/null
-        apt-get remove -y --purge apparmor* &> /dev/null
-        disable_file /etc/init.d/apparmor &> /dev/null
-        echo -e "AppArmor has been removed."
-    fi
-fi
-
 #--- Adapt repositories and packages sources
 echo -e "\n-- Updating repositories and packages sources"
 if [[ "$OS" = "CentOs" ]]; then
